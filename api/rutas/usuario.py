@@ -28,11 +28,20 @@ def get_users():
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM usuario")
-    users = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(users), 200
+    data = request.get_json()
+    if data is not None:
+      if data["numero"] is not None:
+        cursor.execute("SELECT * FROM usuario LIMIT %s", (data["numero"],))
+        users = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return jsonify(users), 200
+    else:
+      cursor.execute("SELECT * FROM usuario")
+      users = cursor.fetchall()
+      cursor.close()
+      conn.close()
+      return jsonify(users), 200
   except Exception as e:
     print("Ha ocurrido un error", e)
     return jsonify({"message": "Ha ocurrido un error"}), 500

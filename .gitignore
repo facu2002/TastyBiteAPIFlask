@@ -1,3 +1,2 @@
-/venv
-/api/__pycache__
-/api/rutas/__pycache__
+venv/
+api/__pycache__/
