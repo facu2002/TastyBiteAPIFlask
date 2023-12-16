@@ -52,6 +52,8 @@ def get_usuarios():
     else:
       cursor.execute("SELECT * FROM usuario LIMIT 10;")
     usuarios = cursor.fetchall()
+    # convertimos la lista de tuplas en una lista de diccionarios
+    usuarios = [{"username": usuario[0], "nombre": usuario[1], "apellidos": usuario[2], "descripcion_perfil": usuario[3], "email": usuario[4]} for usuario in usuarios]
     return jsonify(usuarios), 200
   except Exception as e:
     print("Ha ocurrido un error", e)
