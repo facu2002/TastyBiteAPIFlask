@@ -22,6 +22,8 @@ def get_user(username):
     print("Ha ocurrido un error", e)
     return jsonify({"message": "Ha ocurrido un error"}), 500
 
+
+
 # recibimos parametros por el body de la peticion
 @usuario_bp.route('', methods=['POST'])
 def post_user():
@@ -29,12 +31,17 @@ def post_user():
     conn = get_db_connection()
     cursor = conn.cursor()
     data = request.get_json()
-    cursor.execute(f"INSERT INTO usuario (username, password, nombre, apellido, email) VALUES ({data['username']}, {data['password']}, {data['nombre']}, {data['apellido']}, {data['email']})")
+    # INSERT INTO usuario (username, nombre, apellidos, descripcion_perfil, email) VALUES ('juan', 'Juan', 'Perez', 'Soy un usuario de prueba.', 'juan.perez@example.com');
+
+    cursor.execute(f"INSERT INTO usuario (username, nombre, apellidos, descripcion_perfil, email) VALUES ('{data['username']}', '{data['nombre']}', '{data['apellidos']}', '{data['descripcion_perfil']}', '{data['email']}');")
   
     conn.commit()
     cursor.close()
     conn.close()
-    return jsonify({"message": "Usuario creado exitosamente"}), 201
+    # retonarmos el mensaje de exito y el usuario creado
+    return jsonify({"message": "Usuario creado exitosamente", "usuario": data}), 201
   except Exception as e:
+    if 'duplicate key value violates unique constraint' in str(e):
+      return jsonify({"message": "El username ya existe"}), 409
     print("Ha ocurrido un error", e)
     return jsonify({"message": "Ha ocurrido un error"}), 500
