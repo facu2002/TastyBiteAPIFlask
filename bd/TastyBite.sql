@@ -13,28 +13,28 @@ ALTER SCHEMA public OWNER TO postgres;
 
 
 -- Creamos las tablas en la base de datos
-\i ./schema/usuario.sql
-\i ./schema/categoria.sql
-\i ./schema/amigo.sql
-\i ./schema/receta.sql
-\i ./schema/ingrediente.sql
-\i ./schema/ranking.sql
-\i ./schema/usuario_receta.sql
-\i ./schema/receta_ingrediente.sql
-\i ./schema/patrocinador.sql
-\i ./schema/puntuacion.sql
-\i ./schema/comentario.sql
-\i ./schema/interaccion.sql
+\i ./bd/schema/usuario.sql
+\i ./bd/schema/categoria.sql
+\i ./bd/schema/amigo.sql
+\i ./bd/schema/receta.sql
+\i ./bd/schema/ingrediente.sql
+\i ./bd/schema/ranking.sql
+\i ./bd/schema/usuario_receta.sql
+\i ./bd/schema/receta_ingrediente.sql
+\i ./bd/schema/patrocinador.sql
+\i ./bd/schema/puntuacion.sql
+\i ./bd/schema/comentario.sql
+\i ./bd/schema/interaccion.sql
 
 -- Insertamos las entradas en las tablas
-\i ./data/usuario_data.sql
-\i ./data/categoria_data.sql
-\i ./data/amigo_data.sql
-\i ./data/receta_data.sql
-\i ./data/ingrediente_data.sql
-\i ./data/usuario_receta_data.sql
-\i ./data/receta_ingrediente_data.sql
-\i ./data/patrocinador_data.sql
-\i ./data/puntuacion_data.sql
-\i ./data/comentario_data.sql
-\i ./data/interaccion_data.sql
+\i ./bd/data/usuario_data.sql
+\i ./bd/data/categoria_data.sql
+\i ./bd/data/amigo_data.sql
+\i ./bd/data/receta_data.sql
+\i ./bd/data/ingrediente_data.sql
+\i ./bd/data/usuario_receta_data.sql
+\i ./bd/data/receta_ingrediente_data.sql
+\i ./bd/data/patrocinador_data.sql
+\i ./bd/data/puntuacion_data.sql
+\i ./bd/data/comentario_data.sql
+\i ./bd/data/interaccion_data.sql
