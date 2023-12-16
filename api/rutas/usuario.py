@@ -23,6 +23,19 @@ def get_user(username):
     return jsonify({"message": "Ha ocurrido un error"}), 500
 
 
+@usuario_bp.route('', methods=['GET'])
+def get_users():
+  try:
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM usuario")
+    users = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(users), 200
+  except Exception as e:
+    print("Ha ocurrido un error", e)
+    return jsonify({"message": "Ha ocurrido un error"}), 500
 
 # recibimos parametros por el body de la peticion
 @usuario_bp.route('', methods=['POST'])
