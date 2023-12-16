@@ -6,6 +6,9 @@ from db_connection import get_db_connection
 usuario_bp = Blueprint('usuario', __name__)
 
 
+#########################################################################################################################################
+
+
 @usuario_bp.route('<string:username>', methods=['GET']) 
 def get_user(username):
   try:
@@ -23,28 +26,37 @@ def get_user(username):
     return jsonify({"message": "Ha ocurrido un error"}), 500
 
 
+
+#########################################################################################################################################
+
+
 @usuario_bp.route('', methods=['GET'])
 def get_users():
   try:
     conn = get_db_connection()
-    cursor = conn.cursor()
-    data = request.get_json()
-    if data is not None:
-      if data["numero"] is not None:
-        cursor.execute("SELECT * FROM usuario LIMIT %s", (data["numero"],))
-        users = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return jsonify(users), 200
+    cursor = conn.cursor()   
+    try:
+      data = request.get_json()
+    except:
+      # si no se envia ningun parametro por el body de la peticion, data sera None
+      data = None
+    numero = data.get("numero") if (data is not None) else None
+    if numero is not None:
+      cursor.execute("SELECT * FROM usuario LIMIT %s;", (numero,))
     else:
-      cursor.execute("SELECT * FROM usuario")
-      users = cursor.fetchall()
-      cursor.close()
-      conn.close()
-      return jsonify(users), 200
+      cursor.execute("SELECT * FROM usuario LIMIT 10;")
+    users = cursor.fetchall()
+    return jsonify(users), 200
   except Exception as e:
     print("Ha ocurrido un error", e)
     return jsonify({"message": "Ha ocurrido un error"}), 500
+  finally:
+    cursor.close()
+    conn.close()
+
+
+#########################################################################################################################################
+
 
 # recibimos parametros por el body de la peticion
 @usuario_bp.route('', methods=['POST'])
@@ -53,10 +65,7 @@ def post_user():
     conn = get_db_connection()
     cursor = conn.cursor()
     data = request.get_json()
-    # INSERT INTO usuario (username, nombre, apellidos, descripcion_perfil, email) VALUES ('juan', 'Juan', 'Perez', 'Soy un usuario de prueba.', 'juan.perez@example.com');
-
     cursor.execute(f"INSERT INTO usuario (username, nombre, apellidos, descripcion_perfil, email) VALUES ('{data['username']}', '{data['nombre']}', '{data['apellidos']}', '{data['descripcion_perfil']}', '{data['email']}');")
-  
     conn.commit()
     cursor.close()
     conn.close()
@@ -65,5 +74,8 @@ def post_user():
   except Exception as e:
     if 'duplicate key value violates unique constraint' in str(e):
       return jsonify({"message": "El username ya existe"}), 409
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+
+
+#########################################################################################################################################
+
