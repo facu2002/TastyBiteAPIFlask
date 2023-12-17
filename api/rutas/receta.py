@@ -21,6 +21,15 @@ def get_receta(receta_id):
     ingredientes = cursor.fetchall()
     ingredientes = [{ "nombre": ingrediente[0], "ingrediente_id": ingrediente[1] } for ingrediente in ingredientes]
     
+    cursor.execute(f"SELECT comentario.comentario_id, username, contenido FROM interaccion JOIN comentario ON comentario.comentario_id = interaccion.comentario_id WHERE receta_id = {receta_id} AND puntuacion_id IS NULL;")
+    comentarios = cursor.fetchall()
+    comentarios = [{ "comentario_id": comentario[0], "username": comentario[1], "contenido": comentario[2] } for comentario in comentarios] 
+    
+    
+    cursor.execute(f"SELECT puntuacion.puntuacion_id, username, nota FROM interaccion JOIN puntuacion ON puntuacion.puntuacion_id = interaccion.puntuacion_id WHERE receta_id = {receta_id} AND comentario_id IS NULL;")
+    puntuaciones = cursor.fetchall()
+    puntuaciones = [{ "puntuacion_id": puntuacion[0], "username": puntuacion[1], "puntuacion": puntuacion[2] } for puntuacion in puntuaciones]
+    
     cursor.close()
     conn.close()
     if receta is None:
@@ -34,7 +43,9 @@ def get_receta(receta_id):
       "raciones": receta[5],
       "dificultad": receta[6],
       "username": username[0],
-      "ingredientes": ingredientes
+      "ingredientes": ingredientes, 
+      "comentarios": comentarios,
+      "puntuaciones": puntuaciones
     }
     return jsonify(receta), 200
   except Exception as e:

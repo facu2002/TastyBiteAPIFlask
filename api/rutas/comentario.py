@@ -34,37 +34,6 @@ def get_comentario(comentario_id):
 #########################################################################################################################################
 
 
-@comentario_bp.route('', methods=['GET'])
-def get_comentarios():
-  try:
-    conn = get_db_connection()
-    cursor = conn.cursor()   
-    try:
-      data = request.get_json()
-    except:
-      # si no se envia ningun parametro por el body de la peticion, data sera None
-      data = None
-    receta_id = data.get("receta_id") if (data is not None) else None
-    if receta_id is not None:
-      cursor.execute(f"SELECT * from interaccion where receta_id = {receta_id} and puntuacion_id is NULL;")
-    else:
-      return jsonify({"message": "No se ha enviado el id de la receta"}), 400
-    comentarios = cursor.fetchall()
-    # convertimos la lista de tuplas en una lista de diccionarios
-        # INSERT INTO comentario(contenido) VALUES ('La receta del pastel de chocolate estaba deliciosa, muy rica en sabores.');
-
-    comentarios = [{"comentario_id": comentario[1], "username": comentario[3], "receta_id": comentario[4]} for comentario in comentarios]
-    return jsonify(comentarios), 200
-  except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
-  finally:
-    cursor.close()
-    conn.close()
-
-#########################################################################################################################################
-
-
 
 # recibimos parametros por el body de la peticion
 @comentario_bp.route('', methods=['POST'])
