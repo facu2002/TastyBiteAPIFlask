@@ -15,6 +15,9 @@ def get_usuario(username):
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM usuario WHERE username = '{username}';")
     usuario = cursor.fetchone()
+    cursor.execute(f"SELECT titulo, receta.receta_id FROM (SELECT receta_id FROM usuario_receta WHERE username = '{username}') AS subquery JOIN receta ON receta.receta_id = subquery.receta_id;")
+    recetas = cursor.fetchall()
+    recetas = [{"titulo": receta[0], "receta_id": receta[1]} for receta in recetas]
     cursor.close()
     conn.close()
     if usuario is None:
@@ -24,7 +27,8 @@ def get_usuario(username):
       "nombre": usuario[1],
       "apellidos": usuario[2],
       "descripcion_perfil": usuario[3],
-      "email": usuario[4]
+      "email": usuario[4],
+      "recetas": recetas
     }
     return jsonify(usuario), 200
   except Exception as e:

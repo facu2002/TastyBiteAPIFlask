@@ -15,6 +15,12 @@ def get_ingrediente(ingrediente_id):
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM ingrediente WHERE ingrediente_id = '{ingrediente_id}';")
     ingrediente = cursor.fetchone()
+    
+    cursor.execute(f"SELECT titulo, receta.receta_id FROM (SELECT receta_id FROM receta_ingrediente WHERE ingrediente_id = {ingrediente_id}) AS subquery JOIN receta ON receta.receta_id = subquery.receta_id;")
+    recetas = cursor.fetchall()
+    recetas = [{"titulo": receta[0], "receta_id": receta[1]} for receta in recetas]
+    
+  
     cursor.close()
     conn.close()
     if ingrediente is None:
@@ -23,7 +29,8 @@ def get_ingrediente(ingrediente_id):
       "ingrediente_id": ingrediente[0],
       "nombre": ingrediente[1],
       "descripcion": ingrediente[2],
-      "unidad_medida": ingrediente[3]
+      "unidad_medida": ingrediente[3],
+      "recetas": recetas
     }
     return jsonify(ingrediente), 200
   except Exception as e:

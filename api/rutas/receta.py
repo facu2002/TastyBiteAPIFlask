@@ -14,6 +14,13 @@ def get_receta(receta_id):
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM receta WHERE receta_id = {receta_id}")
     receta = cursor.fetchone()
+    cursor.execute(f"SELECT username FROM receta JOIN usuario_receta ON receta.receta_id = usuario_receta.receta_id WHERE receta.receta_id = {receta_id};")
+    username = cursor.fetchone()
+    
+    cursor.execute(f"SELECT nombre, ingrediente.ingrediente_id FROM receta JOIN receta_ingrediente ON receta.receta_id = receta_ingrediente.receta_id JOIN ingrediente ON ingrediente.ingrediente_id = receta_ingrediente.ingrediente_id WHERE receta.receta_id = {receta_id};")
+    ingredientes = cursor.fetchall()
+    ingredientes = [{ "nombre": ingrediente[0], "ingrediente_id": ingrediente[1] } for ingrediente in ingredientes]
+    
     cursor.close()
     conn.close()
     if receta is None:
@@ -25,7 +32,9 @@ def get_receta(receta_id):
       "instrucciones": receta[3],
       "tiempo": receta[4],
       "raciones": receta[5],
-      "dificultad": receta[6]
+      "dificultad": receta[6],
+      "username": username[0],
+      "ingredientes": ingredientes
     }
     return jsonify(receta), 200
   except Exception as e:
