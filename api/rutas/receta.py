@@ -6,34 +6,45 @@ receta_bp = Blueprint('receta', __name__)
 
 #########################################################################################################################################
 
+# GET /api/recetas/:receta_id
 
 @receta_bp.route('<int:receta_id>', methods=['GET'])
 def get_receta(receta_id):
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Obtenemos la receta desde la tabla receta
     cursor.execute(f"SELECT * FROM receta WHERE receta_id = {receta_id}")
     receta = cursor.fetchone()
+    
+    # Comprobamos que la receta existe
+    if receta is None:
+      return jsonify({"message": "Receta no encontrada"}), 404
+    
+    # Obtenemos el usuario que ha creado la receta
     cursor.execute(f"SELECT username FROM receta JOIN usuario_receta ON receta.receta_id = usuario_receta.receta_id WHERE receta.receta_id = {receta_id};")
     username = cursor.fetchone()
     
+    # Obtenemos los ingredientes de la receta
     cursor.execute(f"SELECT nombre, ingrediente.ingrediente_id FROM receta JOIN receta_ingrediente ON receta.receta_id = receta_ingrediente.receta_id JOIN ingrediente ON ingrediente.ingrediente_id = receta_ingrediente.ingrediente_id WHERE receta.receta_id = {receta_id};")
     ingredientes = cursor.fetchall()
     ingredientes = [{ "nombre": ingrediente[0], "ingrediente_id": ingrediente[1] } for ingrediente in ingredientes]
     
+    # Obtenemos los comentarios de la receta
     cursor.execute(f"SELECT comentario.comentario_id, username, contenido FROM interaccion JOIN comentario ON comentario.comentario_id = interaccion.comentario_id WHERE receta_id = {receta_id} AND puntuacion_id IS NULL;")
     comentarios = cursor.fetchall()
     comentarios = [{ "comentario_id": comentario[0], "username": comentario[1], "contenido": comentario[2] } for comentario in comentarios] 
     
-    
+    # Obtenemos las puntuaciones de la receta
     cursor.execute(f"SELECT puntuacion.puntuacion_id, username, nota FROM interaccion JOIN puntuacion ON puntuacion.puntuacion_id = interaccion.puntuacion_id WHERE receta_id = {receta_id} AND comentario_id IS NULL;")
     puntuaciones = cursor.fetchall()
     puntuaciones = [{ "puntuacion_id": puntuacion[0], "username": puntuacion[1], "puntuacion": puntuacion[2] } for puntuacion in puntuaciones]
     
     cursor.close()
     conn.close()
-    if receta is None:
-      return jsonify({"message": "Receta no encontrado"}), 404    
+ 
+    # Creamos el objeto receta que vamos a devolver
     receta = {
       "receta_id": receta[0],
       "titulo": receta[1],
@@ -47,6 +58,7 @@ def get_receta(receta_id):
       "comentarios": comentarios,
       "puntuaciones": puntuaciones
     }
+    
     return jsonify(receta), 200
   except Exception as e:
     print("Ha ocurrido un error", e)
@@ -56,22 +68,32 @@ def get_receta(receta_id):
 
 #########################################################################################################################################
 
+# GET /api/recetas
+
 
 @receta_bp.route('', methods=['GET'])
 def get_recetas():
   try:
     conn = get_db_connection()
     cursor = conn.cursor()   
+    
     try:
+      # Obtenemos el numero de recetas que se quieren obtener
       data = request.get_json()
     except:
       # si no se envia ningun parametro por el body de la peticion, data sera None
       data = None
+    
+    # Obtenemos el numero de recetas que se quieren obtener  
     numero = data.get("numero") if (data is not None) else None
+    
+    # Obtenemos las recetas desde la tabla receta
     if numero is not None:
       cursor.execute(f"SELECT * FROM receta LIMIT {numero};")
     else:
+      # En caso de no pasar ningun parametro, se obtienen 10 recetas
       cursor.execute("SELECT * FROM receta LIMIT 10;")
+    
     recetas = cursor.fetchall()
     return jsonify(recetas), 200
   except Exception as e:
@@ -84,6 +106,7 @@ def get_recetas():
 
 #########################################################################################################################################
 
+# POST /api/recetas
 
 
 @receta_bp.route('', methods=['POST'])
@@ -92,7 +115,10 @@ def post_receta():
     conn = get_db_connection()
     cursor = conn.cursor()
     data = request.get_json()
+    
+    # Realizamos la insercion de la receta en la tabla receta
     cursor.execute(f"INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('{data['titulo']}', {data['categoria_id']}, '{data['instrucciones']}', {data['tiempo']}, {data['raciones']}, {data['dificultad']});")
+    
     cursor.execute(f"SELECT * FROM receta WHERE receta_id = {data['receta_id']};")
     receta = cursor.fetchone()
     receta = {
@@ -105,6 +131,7 @@ def post_receta():
     conn.commit()
     cursor.close()
     conn.close()
+    
     # retonarmos el mensaje de exito y el receta creado
     return jsonify({"message": "Receta creada exitosamente", "receta": receta}), 201
   except Exception as e:
@@ -115,7 +142,7 @@ def post_receta():
 
 #########################################################################################################################################
 
-
+# PUT /api/recetas/:receta_id
 
 @receta_bp.route('<int:receta_id>', methods=['PUT'])
 def put_receta(recipe_id):
@@ -175,7 +202,8 @@ def put_receta(recipe_id):
 
 
 #########################################################################################################################################
-  
+
+# DELETE /api/recetas/:receta_id
 
 @receta_bp.route('<int:receta_id>', methods=['DELETE'])
 def delete_receta(receta_id):

@@ -7,24 +7,29 @@ ingrediente_bp = Blueprint('ingrediente', __name__)
 
 #########################################################################################################################################
 
+# GET /api/ingredientes/:ingrediente_id
 
 @ingrediente_bp.route('<int:ingrediente_id>', methods=['GET']) 
 def get_ingrediente(ingrediente_id):
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Obtenemos el ingrediente desde la tabla ingrediente
     cursor.execute(f"SELECT * FROM ingrediente WHERE ingrediente_id = '{ingrediente_id}';")
     ingrediente = cursor.fetchone()
     
+    # Comprobamos que el ingrediente existe
+    if ingrediente is None:
+      return jsonify({"message": "Ingrediente no encontrado"}), 404
+    
+    # Obtenemos las recetas en las que aparece el ingrediente
     cursor.execute(f"SELECT titulo, receta.receta_id FROM (SELECT receta_id FROM receta_ingrediente WHERE ingrediente_id = {ingrediente_id}) AS subquery JOIN receta ON receta.receta_id = subquery.receta_id;")
     recetas = cursor.fetchall()
     recetas = [{"titulo": receta[0], "receta_id": receta[1]} for receta in recetas]
     
-  
     cursor.close()
     conn.close()
-    if ingrediente is None:
-      return jsonify({"message": "Ingrediente no encontrado"}), 404
     ingrediente = {
       "ingrediente_id": ingrediente[0],
       "nombre": ingrediente[1],
@@ -40,6 +45,7 @@ def get_ingrediente(ingrediente_id):
 
 #########################################################################################################################################
 
+# GET /api/ingredientes
 
 @ingrediente_bp.route('', methods=['GET'])
 def get_ingredientes():
@@ -52,10 +58,13 @@ def get_ingredientes():
       # si no se envia ningun parametro por el body de la peticion, data sera None
       data = None
     numero = data.get("numero") if (data is not None) else None
+    
+    # Obtenemos los ingredientes desde la tabla ingrediente
     if numero is not None:
       cursor.execute(f"SELECT * FROM ingrediente LIMIT {numero};")
     else:
       cursor.execute("SELECT * FROM ingrediente LIMIT 10;")
+    
     ingredientes = cursor.fetchall()
     return jsonify(ingredientes), 200
   except Exception as e:
@@ -68,17 +77,20 @@ def get_ingredientes():
 
 #########################################################################################################################################
 
+# POST /api/ingredientes
 
-# recibimos parametros por el body de la peticion
 @ingrediente_bp.route('', methods=['POST'])
 def post_ingrediente():
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
     data = request.get_json()
+    
+    # Insertamos el ingrediente en la tabla ingrediente
     cursor.execute(f"INSERT INTO ingrediente (nombre, descripcion, unidad_medida) VALUES ('{data['nombre']}', '{data['descripcion']}', '{data['unidad_medida']}');")
     cursor.execute(f"SELECT * FROM ingrediente WHERE nombre = '{data['nombre']}' AND descripcion = '{data['descripcion']}' AND unidad_medida = '{data['unidad_medida']}';")
     ingrediente = cursor.fetchone()
+
     ingrediente = {
       "ingrediente_id": ingrediente[0],
       "nombre": ingrediente[1],
