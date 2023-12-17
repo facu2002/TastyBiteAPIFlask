@@ -28,17 +28,22 @@ INSERT INTO amigo (username1, username2) VALUES ('jose', 'carmen');
 INSERT INTO amigo (username1, username2) VALUES ('jose', 'francisco');
 INSERT INTO amigo (username1, username2) VALUES ('jose', 'daniel');
 INSERT INTO amigo (username1, username2) VALUES ('jose', 'susana');
+INSERT INTO amigo (username1, username2) VALUES ('jose', 'marcos');
 INSERT INTO amigo (username1, username2) VALUES ('carlos', 'miguel');
 INSERT INTO amigo (username1, username2) VALUES ('carlos', 'roberto');
 INSERT INTO amigo (username1, username2) VALUES ('carlos', 'silvia');
 INSERT INTO amigo (username1, username2) VALUES ('carlos', 'gabriel');
 INSERT INTO amigo (username1, username2) VALUES ('carlos', 'claudia');
+INSERT INTO amigo (username1, username2) VALUES ('carlos', 'marcos');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'adrian');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'beatriz');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'felipe');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'lucia');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'oscar');
 INSERT INTO amigo (username1, username2) VALUES ('david', 'marcos');
+INSERT INTO amigo (username1, username2) VALUES ('marcos', 'oscar');
+INSERT INTO amigo (username1, username2) VALUES ('marcos', 'luis');
+INSERT INTO amigo (username1, username2) VALUES ('marcos', 'pedro');
 
 -- uno de los usuarios no existe
 -- INSERT INTO amigo (username1, username2) VALUES ('david', 'usu');

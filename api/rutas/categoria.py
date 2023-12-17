@@ -5,6 +5,9 @@ from db_connection import get_db_connection
 categoria_bp = Blueprint('categoria', __name__)
 
 
+#########################################################################################################################################
+
+
 @categoria_bp.route('<int:categoria_id>', methods=['GET']) 
 def get_categoria(categoria_id):
   try:

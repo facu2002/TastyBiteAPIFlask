@@ -5,7 +5,7 @@ def get_db_connection():
     conn = psycopg2.connect(host='localhost',
         database="tastybite",
         user="postgres",
-        password="12345")
+        password="nueva_contraseña")
   except psycopg2.Error as e:
     print("Fallo en la conexión con la base de datos", e)
     raise e

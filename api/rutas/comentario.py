@@ -5,6 +5,8 @@ from db_connection import get_db_connection
 comentario_bp = Blueprint('comentario', __name__)
 
 
+#########################################################################################################################################
+
 
 @comentario_bp.route('<int:comentario_id>', methods=['GET']) 
 def get_comentario(comentario_id):
