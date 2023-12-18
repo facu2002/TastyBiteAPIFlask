@@ -8,6 +8,8 @@ from rutas.categoria import categoria_bp
 from rutas.comentario import comentario_bp
 from rutas.puntuacion import puntuacion_bp
 from rutas.amigo import amigo_bp
+from rutas.ranking import ranking_bp
+from rutas.patrocinador import patrocinador_bp
 
 app = Flask(__name__)
 
@@ -19,6 +21,9 @@ app.register_blueprint(categoria_bp, url_prefix='/api/categorias')
 app.register_blueprint(comentario_bp, url_prefix='/api/comentarios')
 app.register_blueprint(puntuacion_bp, url_prefix='/api/puntuaciones')
 app.register_blueprint(amigo_bp, url_prefix='/api/amigos')
+app.register_blueprint(ranking_bp, url_prefix='/api/ranking')
+app.register_blueprint(patrocinador_bp, url_prefix='/api/patrocinadores')
+
 
 if __name__ == '__main__':
   app.run(debug=True)
