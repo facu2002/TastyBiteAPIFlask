@@ -2,6 +2,7 @@ CREATE TABLE categoria (
   categoria_id INTEGER NOT NULL,
   nombre TEXT NOT NULL,
   descripcion TEXT NOT NULL,
+  CONSTRAINT nombre_categoria UNIQUE (nombre),
   CONSTRAINT no_espacios_nombre CHECK (nombre ~ '^[A-Za-z\s]*$' AND nombre !~ '^\s|\s$'),
   CONSTRAINT longitud_descripcion CHECK (LENGTH(descripcion) <= 250)
 );

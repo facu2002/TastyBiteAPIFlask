@@ -4,6 +4,7 @@ CREATE TABLE ingrediente (
   descripcion TEXT NOT NULL,
   unidad_medida TEXT NOT NULL,
   CONSTRAINT nombre_ingrediente UNIQUE (nombre),
+  CONSTRAINT no_espacios_nombre CHECK (nombre !~ '\s'),
   CONSTRAINT longitud_nombre CHECK (char_length(nombre) > 0 AND char_length(nombre) <= 50),
   CONSTRAINT longitud_descripcion CHECK (char_length(descripcion) > 0 AND char_length(descripcion) <= 100),
   CONSTRAINT unidad_medida_valida CHECK (unidad_medida IN ('kg', 'g', 'l', 'ml', 'taza', 'cda', 'pizca'))

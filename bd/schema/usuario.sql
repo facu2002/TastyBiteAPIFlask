@@ -4,7 +4,6 @@ CREATE TABLE usuario (
   apellidos TEXT NOT NULL,
   descripcion_perfil TEXT NOT NULL,
   email TEXT NOT NULL,
-  PRIMARY KEY (username),
   CONSTRAINT no_espacios_username CHECK (username !~ '\s'),
   CONSTRAINT no_espacios_nombre CHECK (nombre ~ '^[A-Za-z\s]*$' AND nombre !~ '^\s|\s$'),
   CONSTRAINT longitud_nombre CHECK (LENGTH(nombre) <= 50),
@@ -15,3 +14,7 @@ CREATE TABLE usuario (
 );
 
 ALTER TABLE public.usuario OWNER TO postgres;
+
+
+ALTER TABLE ONLY public.usuario
+  ADD CONSTRAINT username_pk PRIMARY KEY (username);
