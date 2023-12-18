@@ -29,6 +29,8 @@ INSERT INTO puntuacion(nota) VALUES (4);
 INSERT INTO puntuacion(nota) VALUES (5);
 INSERT INTO puntuacion(nota) VALUES (4);
 
+INSERT INTO puntuacion(nota) VALUES (4);
+
 
 
 

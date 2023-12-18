@@ -149,6 +149,8 @@ INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dific
 INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('Ensalada Waldorf', 18, 'Mezcla lechuga, manzanas, apio y nueces. Aliña con mayonesa y yogur. Sirve como acompañamiento o plato ligero.', 15, 4, 2);
 INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('Sopa de Lentejas con Chorizo', 19, 'Cocina lentejas con chorizo, cebolla, zanahorias y apio. Agrega caldo de verduras y cocina a fuego lento hasta que las lentejas estén tiernas.', 45, 6, 3);
 
+INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('a', 19, 'a', 45, 6, 3);
+
 -- están bien pero las quitammos
 -- INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('Crepes de Espinacas y Queso Feta', 16, 'Prepara crepes y mezcla espinacas salteadas con queso feta. Rellena las crepes y sirve con una salsa de yogur y eneldo.', 30, 4, 2);
 -- INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('Rollitos de Sushi de Mango y Aguacate', 22, 'Prepara arroz para sushi y extiéndelo sobre una hoja de alga nori. Añade tiras de mango y aguacate. Enrolla y corta en porciones. Sirve con salsa de soja y jengibre.', 30, 4, 2);

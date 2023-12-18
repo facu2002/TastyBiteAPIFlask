@@ -35,3 +35,14 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER actualizar_ranking_trigger
 AFTER INSERT OR UPDATE OR DELETE ON usuario_receta
 FOR EACH ROW EXECUTE PROCEDURE actualizar_ranking();
+
+CREATE OR REPLACE FUNCTION eliminar_receta() RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM receta WHERE receta_id = OLD.receta_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER eliminar_receta_trigger
+AFTER DELETE ON usuario_receta
+FOR EACH ROW EXECUTE PROCEDURE eliminar_receta();
