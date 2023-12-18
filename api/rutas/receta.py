@@ -61,15 +61,12 @@ def get_receta(receta_id):
     
     return jsonify(receta), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
-
-
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  
 
 #########################################################################################################################################
 
 # GET /api/recetas
-
 
 @receta_bp.route('', methods=['GET'])
 def get_recetas():
@@ -97,8 +94,8 @@ def get_recetas():
     recetas = cursor.fetchall()
     return jsonify(recetas), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  
   finally:
     cursor.close()
     conn.close()
@@ -233,5 +230,5 @@ def delete_receta(receta_id):
       return jsonify({"message": "receta no encontrado"}), 404
     return jsonify(receta), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  

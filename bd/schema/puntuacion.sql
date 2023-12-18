@@ -36,6 +36,6 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE TRIGGER establecer_fecha_puntuacion
-BEFORE INSERT ON puntuacion
+BEFORE INSERT OR UPDATE ON puntuacion
 FOR EACH ROW
 EXECUTE PROCEDURE establecer_fecha();

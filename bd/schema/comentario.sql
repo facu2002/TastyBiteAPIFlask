@@ -36,6 +36,6 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE TRIGGER establecer_fecha_comentario
-BEFORE INSERT ON comentario
+BEFORE INSERT OR UPDATE ON comentario
 FOR EACH ROW
 EXECUTE PROCEDURE establecer_fecha();

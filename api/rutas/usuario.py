@@ -41,8 +41,7 @@ def get_usuario(username):
     }
     return jsonify(usuario), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
 
 
 
@@ -74,8 +73,7 @@ def get_usuarios():
     usuarios = [{"username": usuario[0], "nombre": usuario[1], "apellidos": usuario[2], "descripcion_perfil": usuario[3], "email": usuario[4]} for usuario in usuarios]
     return jsonify(usuarios), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
   finally:
     cursor.close()
     conn.close()
@@ -202,5 +200,5 @@ def delete_usuario(username):
       return jsonify({"message": "Usuario no encontrado"}), 404
     return jsonify(usuario), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  

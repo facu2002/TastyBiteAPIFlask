@@ -39,8 +39,8 @@ def get_ingrediente(ingrediente_id):
     }
     return jsonify(ingrediente), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  
 
 
 #########################################################################################################################################
@@ -68,8 +68,8 @@ def get_ingredientes():
     ingredientes = cursor.fetchall()
     return jsonify(ingredientes), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  
   finally:
     cursor.close()
     conn.close()
@@ -184,5 +184,5 @@ def post_ingrediente():
 #       return jsonify({"message": "Ingrediente no encontrado"}), 404
 #     return jsonify(ingrediente), 200
 #   except Exception as e:
-#     print("Ha ocurrido un error", e)
-#     return jsonify({"message": "Ha ocurrido un error"}), 500
+    # return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+

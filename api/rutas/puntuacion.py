@@ -7,19 +7,25 @@ puntuacion_bp = Blueprint('puntuacion', __name__)
 
 #########################################################################################################################################
 
+# GET /api/puntuaciones/:puntuacion_id
 
 @puntuacion_bp.route('<int:puntuacion_id>', methods=['GET']) 
 def get_puntuacion(puntuacion_id):
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Obtenemos la puntucion con el id especificado
     cursor.execute(f"SELECT * FROM puntuacion WHERE puntuacion_id = '{puntuacion_id}';")
     puntuacion = cursor.fetchone()
     cursor.close()
     conn.close()
+    
+    # Comprobamos que la puntuacion existe
     if puntuacion is None:
       return jsonify({"message": "puntuacion no encontrado"}), 404
     
+    # Damos formato a la puntuacion
     puntuacion = {
       "puntuacion_id": puntuacion[0],
       "fecha": puntuacion[1],
@@ -27,21 +33,21 @@ def get_puntuacion(puntuacion_id):
     }
     return jsonify(puntuacion), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
   
   
-
+  
 #########################################################################################################################################
 
+# POST /api/puntuaciones
 
-
-# recibimos parametros por el body de la peticion
 @puntuacion_bp.route('', methods=['POST'])
 def post_puntuacion():
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
+    
+    # Comprobamos que se pasan los parámetros por el body de la petición
     try: 
       data = request.get_json()
     except:
@@ -53,12 +59,15 @@ def post_puntuacion():
     if data.get('nota') is None:
       return jsonify({"message": "No se ha enviado la nota de la puntuacion"}), 400
     
-
+    # Insertamos la puntuacion en la base de datos
     cursor.execute(f"INSERT INTO puntuacion (nota) VALUES ('{data['nota']}') RETURNING *;")
     nueva_puntuacion = cursor.fetchone()
+    
+    # Insertamos la interaccion en la base de datos
     cursor.execute(f"INSERT INTO interaccion (comentario_id, puntuacion_id, username, receta_id) VALUES (null, {nueva_puntuacion[0]}, '{data['username']}', {data['receta_id']}) RETURNING *;")
     nueva_interaccion = cursor.fetchone()
     
+    # Damos formato a la puntuacion
     puntuacion = {
       "puntuacion_id": nueva_puntuacion[0],
       "fecha": nueva_puntuacion[1],
@@ -78,6 +87,7 @@ def post_puntuacion():
 
 #########################################################################################################################################
 
+# PUT /api/puntuaciones/:puntuacion_id
 
 @puntuacion_bp.route('<int:puntuacion_id>', methods=['PUT'])
 def put_puntuacion(puntuacion_id):
@@ -91,17 +101,19 @@ def put_puntuacion(puntuacion_id):
       # se retorna un error
       return jsonify({"message": "No se ha enviado ningun parametro"}), 400
 
-    # se valida que el puntuacion_id no se pueda modificar
+    # Se valida que el puntuacion_id no se pueda modificar
     if data.get("puntuacion_id") is not None:
       return jsonify({"message": "El puntuacion_id no puede ser modificado"}), 400
     
-    # puede que el usuario no pase todos los campos, por lo que se debe validar que campos se van a actualizar
+    # Puede que el usuario no pase todos los campos, por lo que se debe validar que campos se van a actualizar
     nota = data.get("nota") if (data is not None) else None
         
-    # realizamos la actualizacion de los campos que se hayan enviado
+    # Realizamos la actualización de los campos que se hayan enviado
     if nota is not None:
       cursor.execute(f"UPDATE puntuacion SET nota = '{nota}' WHERE puntuacion_id = '{puntuacion_id}' RETURNING *;")
       puntuacion = cursor.fetchone()
+      
+      # Damos formato a la puntuacion
       puntuacion = {
         "puntuacion_id": puntuacion[0],
         "fecha": puntuacion[1],
@@ -121,6 +133,7 @@ def put_puntuacion(puntuacion_id):
 
 #########################################################################################################################################
 
+# DELETE /api/puntuaciones/:puntuacion_id
 
 @puntuacion_bp.route('<int:puntuacion_id>', methods=['DELETE'])
 def delete_puntuacion(puntuacion_id):
@@ -128,10 +141,15 @@ def delete_puntuacion(puntuacion_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Eliminamos la puntuacion de la base de datos
     cursor.execute(f"DELETE FROM puntuacion WHERE puntuacion_id = '{puntuacion_id}' RETURNING *;")
     puntuacion = cursor.fetchone()
+    
+    # Comprobamos que la puntuacion existe
     if puntuacion is None:
       return jsonify({"message": "Puntuación no encontrada"}), 404
+    
+    # Damos formato a la puntuacion
     puntuacion = {
       "puntuacion_id": puntuacion[0],
       "fecha": puntuacion[1],
@@ -140,8 +158,8 @@ def delete_puntuacion(puntuacion_id):
     conn.commit()
     return jsonify({"message": "Puntuación eliminada exitosamente", "puntuacion": puntuacion}), 200
   except Exception as e:
-    print("Ha ocurrido un error", e)
-    return jsonify({"message": "Ha ocurrido un error"}), 500
+    return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
+  
   finally:
     cursor.close()
     conn.close()
