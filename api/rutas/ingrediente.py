@@ -66,6 +66,9 @@ def get_ingredientes():
       cursor.execute("SELECT * FROM ingrediente LIMIT 10;")
     
     ingredientes = cursor.fetchall()
+    
+    ingredientes = [{"ingrediente_id": ingrediente[0], "nombre": ingrediente[1], "descripcion": ingrediente[2], "unidad_medida": ingrediente[3]} for ingrediente in ingredientes]
+    
     return jsonify(ingredientes), 200
   except Exception as e:
     return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500

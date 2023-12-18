@@ -10,7 +10,7 @@ CREATE TABLE receta (
   CONSTRAINT raciones_no_negativas CHECK (raciones >= 0),
   CONSTRAINT rango_dificultad CHECK (dificultad >= 1 AND dificultad <= 5),
   CONSTRAINT longitud_instrucciones CHECK (LENGTH(instrucciones) <= 1000),
-  CONSTRAINT longitud_titulo CHECK (LENGTH(titulo) <= 100)
+  CONSTRAINT longitud_titulo CHECK (LENGTH(titulo) <= 100 AND LENGTH(titulo) > 0)
 );
 
 ALTER TABLE public.receta OWNER TO postgres;

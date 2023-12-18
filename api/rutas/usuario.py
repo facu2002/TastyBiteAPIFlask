@@ -198,7 +198,7 @@ def delete_usuario(username):
     conn.close()
     if usuario is None:
       return jsonify({"message": "Usuario no encontrado"}), 404
-    return jsonify(usuario), 200
+    return jsonify({"message": "Usuario eliminado exitosamente", "usuario": usuario}), 200  
   except Exception as e:
     return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
   

@@ -92,6 +92,17 @@ def get_recetas():
       cursor.execute("SELECT * FROM receta LIMIT 10;")
     
     recetas = cursor.fetchall()
+    
+    recetas = [{
+      "receta_id": receta[0],
+      "titulo": receta[1],
+      "categoria_id": receta[2],
+      "instrucciones": receta[3],
+      "tiempo": receta[4],
+      "raciones": receta[5],
+      "dificultad": receta[6]
+    } for receta in recetas]
+    
     return jsonify(recetas), 200
   except Exception as e:
     return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
@@ -114,9 +125,8 @@ def post_receta():
     data = request.get_json()
     
     # Realizamos la insercion de la receta en la tabla receta
-    cursor.execute(f"INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('{data['titulo']}', {data['categoria_id']}, '{data['instrucciones']}', {data['tiempo']}, {data['raciones']}, {data['dificultad']});")
+    cursor.execute(f"INSERT INTO receta (titulo, categoria_id, instrucciones, tiempo, raciones, dificultad) VALUES ('{data['titulo']}', {data['categoria_id']}, '{data['instrucciones']}', {data['tiempo']}, {data['raciones']}, {data['dificultad']}) RETURNING *;")
     
-    cursor.execute(f"SELECT * FROM receta WHERE receta_id = {data['receta_id']};")
     receta = cursor.fetchone()
     receta = {
       "receta_id": receta[0],
@@ -142,7 +152,7 @@ def post_receta():
 # PUT /api/recetas/:receta_id
 
 @receta_bp.route('<int:receta_id>', methods=['PUT'])
-def put_receta(recipe_id):
+def put_receta(receta_id):
   try:
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -153,9 +163,9 @@ def put_receta(recipe_id):
       # se retorna un error
       return jsonify({"message": "No se ha enviado ningun parametro"}), 400
 
-    # se valida que el recipe_id no se pueda modificar
-    if data.get("recipe_id") is not None:
-      return jsonify({"message": "El recipe_id no puede ser modificado"}), 400
+    # se valida que receta_id no se pueda modificar
+    if data.get("receta_id") is not None:
+      return jsonify({"message": "El receta_id no puede ser modificado"}), 400
 
     # puede que el receta no pase todos los campos, por lo que se debe validar que campos se van a actualizar
     titulo = data.get("titulo") if (data is not None) else None
@@ -167,19 +177,19 @@ def put_receta(recipe_id):
     
     # realizamos la actualizacion de los campos que se hayan enviado
     if titulo is not None:
-      cursor.execute(f"UPDATE receta SET titulo = '{titulo}' WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET titulo = '{titulo}' WHERE receta_id = {receta_id};")
     if categoria_id is not None:
-      cursor.execute(f"UPDATE receta SET categoria_id = {categoria_id} WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET categoria_id = {categoria_id} WHERE receta_id = {receta_id};")
     if instrucciones is not None:
-      cursor.execute(f"UPDATE receta SET instrucciones = '{instrucciones}' WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET instrucciones = '{instrucciones}' WHERE receta_id = {receta_id};")
     if tiempo is not None:
-      cursor.execute(f"UPDATE receta SET tiempo = {tiempo} WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET tiempo = {tiempo} WHERE receta_id = {receta_id};")
     if raciones is not None:
-      cursor.execute(f"UPDATE receta SET raciones = {raciones} WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET raciones = {raciones} WHERE receta_id = {receta_id};")
     if dificultad is not None:
-      cursor.execute(f"UPDATE receta SET dificultad = {dificultad} WHERE recipe_id = {recipe_id};")
+      cursor.execute(f"UPDATE receta SET dificultad = {dificultad} WHERE receta_id = {receta_id};")
     
-    cursor.execute(f"SELECT * FROM receta WHERE recipe_id = '{recipe_id}';")
+    cursor.execute(f"SELECT * FROM receta WHERE receta_id = '{receta_id}';")
     receta = cursor.fetchone()
     receta = {
       "receta_id": receta[0],
@@ -228,7 +238,8 @@ def delete_receta(receta_id):
     conn.close()
     if receta is None:
       return jsonify({"message": "receta no encontrado"}), 404
-    return jsonify(receta), 200
+    return jsonify({"message": "Receta eliminada exitosamente", "receta": receta}), 200
+  
   except Exception as e:
     return jsonify({"message": "Ha ocurrido un error", "error": f"Errores con {e}"}), 500
   
