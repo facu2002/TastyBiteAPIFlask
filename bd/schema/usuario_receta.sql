@@ -1,7 +1,8 @@
 
 CREATE TABLE usuario_receta (
   username TEXT,
-  receta_id INTEGER
+  receta_id INTEGER,
+  CONSTRAINT receta_id_unica UNIQUE (receta_id)
 );
 
 ALTER TABLE public.usuario_receta OWNER TO postgres;

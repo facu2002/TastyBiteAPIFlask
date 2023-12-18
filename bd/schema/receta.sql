@@ -34,6 +34,4 @@ ALTER TABLE ONLY public.receta
   ADD CONSTRAINT receta_pk PRIMARY KEY (receta_id);
 
 ALTER TABLE ONLY public.receta
-  ADD CONSTRAINT categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES public.categoria(categoria_id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
+  ADD CONSTRAINT categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES public.categoria(categoria_id) ON UPDATE SET NULL ON DELETE SET NULL;

@@ -6,6 +6,7 @@ CREATE TABLE usuario (
   email TEXT NOT NULL,
   CONSTRAINT no_espacios_username CHECK (username !~ '\s'),
   CONSTRAINT no_espacios_nombre CHECK (nombre ~ '^[A-Za-z\s]*$' AND nombre !~ '^\s|\s$'),
+  CONSTRAINT longitud_username CHECK (LENGTH(username) <= 20),
   CONSTRAINT longitud_nombre CHECK (LENGTH(nombre) <= 50),
   CONSTRAINT no_espacios_apellidos CHECK (nombre ~ '^[A-Za-z\s]*$' AND nombre !~ '^\s|\s$'),
   CONSTRAINT longitud_apellidos CHECK (LENGTH(apellidos) <= 50),
