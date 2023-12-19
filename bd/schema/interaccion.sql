@@ -40,3 +40,25 @@ ALTER TABLE ONLY public.interaccion
 
 ALTER TABLE ONLY public.interaccion
   ADD CONSTRAINT puntuacion_id_fkey FOREIGN KEY (puntuacion_id) REFERENCES public.puntuacion(puntuacion_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+CREATE OR REPLACE FUNCTION eliminar_comentario() RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM comentario WHERE comentario_id = OLD.comentario_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER eliminar_comentario_trigger
+AFTER DELETE ON interaccion
+FOR EACH ROW EXECUTE PROCEDURE eliminar_comentario();
+
+CREATE OR REPLACE FUNCTION eliminar_puntuacion() RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM puntuacion WHERE puntuacion_id = OLD.puntuacion_id;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER eliminar_puntuacion_trigger
+AFTER DELETE ON interaccion
+FOR EACH ROW EXECUTE PROCEDURE eliminar_puntuacion();

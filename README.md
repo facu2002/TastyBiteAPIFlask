@@ -4,16 +4,29 @@
 ## alu0101406329 - Facundo José García Gallo
 
 
+### Referencias
+
+Anexo 1: Informe Proyecto Final - Tasty Bite
+
+Anexo 2: Manual de usuario de la API y Base de datos TastyBite
+
+Anexo 3: Modelo Entidad- Relación
+
+Anexo 4: Modelo Relacional
+
+Anexo 5: Operaciones de consulta sobre la base de datos
+
+
 ### Organización del proyecto
 
-El proyecto se organiza en dos grandes directorios, uno referente a la base de datos, */bd* y otro referente a la API REST, */api*. Se ha decidido separar ambos directorios para facilitar el desarrollo y la ejecución de los scripts de creación de la base de datos y la ejecución de la API REST.
+El proyecto se organiza en tres grandes directorios, uno referente a la base de datos, */bd*, otro referente a la API REST, */api* y el último */doc* que tiene toda la documentación necesaria así como las entregas que se especifican en el enunciado del proyecto. Se ha decidido separar por directorios para facilitar el desarrollo y la ejecución de los scripts de creación de la base de datos y la ejecución de la API REST.
 
 Si profundizamos en el directorio */bd* podemos encontrar dos subdirectorios y dos scripts. Los subdirectorios son */bd/schema* y */bd/data*. El primero de ellos contiene toda la información referente a las tablas de la base de datos, es decir, en este directorio se encuentran todos los scripts que crean cada una de las tablas que mencionamos en el informe. El segundo de ellos contiene los scripts que insertan los datos en las tablas creadas. Por último, los dos scripts que se encuentran en el directorio */bd* son *TastyBite.sql* y *DeleteTastyBite.sql*. El primero es el script general que se encarga de crear la base de datos en su totalidad, para ello se ayuda de los scripts que se encuentran en el subdirectorio */bd/schema*. El segundo de ellos se encarga de eliminar la base de datos creada.
 
 Si nos fijamos en el directorio */api* podemos encontrar un subdirectorio */api/rutas* y dos scripts. Dentro del subdirectorio encontramos todos los scripts que definen el comportamiento de la API REST, es decir, los scripts que definen las rutas y los métodos que se pueden utilizar en cada una de ellas. Los dos scripts que se encuentran en el directorio */api* son *app.py* y *db_connection.py*. El primero de ellos es el script que se encarga de ejecutar la API REST gracias a la utilización de Flask. El segundo de ellos es el script que se encarga de realizar la conexión con la base de datos en PostgreSQL.
 
-Es importante mencionar que antes de ejecutar la API REST es conveniente ejecutar el script encargado de crear la base de datos, *TastyBite.sql*.
 
+Es importante mencionar que antes de ejecutar la API REST es conveniente ejecutar el script encargado de crear la base de datos, *TastyBite.sql*.
 
 
 ### Ejecución scripts PostgreSQL
