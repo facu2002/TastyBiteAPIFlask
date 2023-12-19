@@ -6,15 +6,15 @@
 
 ### Referencias
 
-Anexo 1: Informe Proyecto Final - Tasty Bite
+[Anexo 1: Informe Proyecto Final - Tasty Bite]()
 
-Anexo 2: Manual de usuario de la API y Base de datos TastyBite
+[Anexo 2: Manual de usuario de la API y Base de datos TastyBite](https://github.com/facu2002/TastyBiteAPIFlask/blob/main/doc/Manual%20de%20Usuario.pdf)
 
-Anexo 3: Modelo Entidad- Relación
+[Anexo 3: Modelo Entidad- Relación](https://github.com/facu2002/TastyBiteAPIFlask/blob/main/doc/Modelo%20Entidad-Relaci%C3%B3n.pdf)
 
-Anexo 4: Modelo Relacional
+[Anexo 4: Modelo Relacional](https://github.com/facu2002/TastyBiteAPIFlask/blob/main/doc/Modelo%20Relacional.pdf)
 
-Anexo 5: Operaciones de consulta sobre la base de datos
+[Anexo 5: Operaciones de consulta sobre la base de datos](https://github.com/facu2002/TastyBiteAPIFlask/blob/main/doc/Consultas%20TastyBite.pdf)
 
 
 ### Organización del proyecto
